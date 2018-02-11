@@ -1,5 +1,5 @@
 const fs = require("fs"),
-	dir = "../gitignore/",
+	dir = "../../gitignore/",
 	exportPrefix = "module.exports ="
 
 // IF gitignore/ DOES NOT EXIST, MAKE IT
