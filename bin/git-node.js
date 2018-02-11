@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 const fs = require("fs"),
-	dir = "../../gitignore/",
+	dir = "gitignore/",
 	exportPrefix = "module.exports ="
 
 if (!fs.existsSync(dir)) {
