@@ -4,6 +4,7 @@
   "description": "A simple Node module for retrieving and writing git commit info",
   "main": "index.js",
   "scripts": {
+    "git-node": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
