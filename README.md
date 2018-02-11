@@ -1,14 +1,14 @@
 # Git-to-JSON
 > Read latest git commit info and write it to JSON
 
-Git-to-JSON is a simple NPM module designed to retrieve the info for your project's most recent git commit and write it to a file in JSON format.
+[Git-to-JSON] is a simple NPM module designed to retrieve the info for your project's most recent git commit and write it to a file in JSON format.
 
 ## Installation
 
 Install this package by running
 
 ``` SH
-npm install --save darrenklein/git-to-json
+npm install --save git-to-json
 ```
 
 or update your `package.json` dependencies like so:
@@ -48,3 +48,5 @@ for example, in your project's `package.json` file:
   "start": "git-to-json && node index.js"
 }
 ```
+
+[Git-to-JSON]: https://www.npmjs.com/package/git-to-json
