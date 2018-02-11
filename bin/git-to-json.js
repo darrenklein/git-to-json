@@ -22,7 +22,7 @@ const stdoutToJSON = (stdout) => {
 	return JSON.stringify(stdoutJSON)
 }
 
-require("child_process").exec("git log", (err, stdout) => {
+require("child_process").exec("git log -1", (err, stdout) => {
 	if (err) {
 		return console.log(err)
 	}
