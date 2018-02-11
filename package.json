@@ -2,9 +2,7 @@
   "name": "git-node",
   "version": "0.0.1",
   "description": "A simple Node module for retrieving and writing git commit info",
-  "main": "index.js",
   "scripts": {
-    "create-git-info-file": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
