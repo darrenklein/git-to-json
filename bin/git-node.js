@@ -1,8 +1,9 @@
 #! /usr/bin/env node
 
 const fs = require("fs"),
+	exportPrefix = "module.exports =",
 	dir = "gitignore/",
-	exportPrefix = "module.exports ="
+	fileName = "git-commit-info.js"
 
 if (!fs.existsSync(dir)) {
 	fs.mkdirSync(dir)
@@ -29,11 +30,11 @@ require("child_process").exec("git log", (err, stdout) => {
 	const stdoutJSON = stdoutToJSON(stdout),
 		commitOutput = `${exportPrefix} ${stdoutJSON}`
 
-	return fs.writeFile(`${dir}git_commit.js`, commitOutput, (error) => {
+	return fs.writeFile(`${dir}${fileName}`, commitOutput, (error) => {
 		if (error) {
 			return console.log(error)
 		}
 
-		return console.log(`Git commit info saved to ${dir}: ${stdoutJSON}`)
+		return console.log(`Git commit info saved to ${dir}${fileName}: ${stdoutJSON}`)
 	})
 })
