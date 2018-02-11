@@ -2,7 +2,7 @@
 
 const fs = require("fs"),
 	exportPrefix = "module.exports =",
-	dir = "gitignore/",
+	dir = "./gitignore/",
 	fileName = "git-commit-info.js"
 
 if (!fs.existsSync(dir)) {
