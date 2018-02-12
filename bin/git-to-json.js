@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
 const fs = require("fs"),
-	dir = "./gitignore/",
-	fileName = "git-commit-info.js",
+	dir = process.argv.indexOf("--dir") > -1 ? `./${process.argv[process.argv.indexOf("--dir") + 1]}/` : "./git-commit-info/",
+	name = process.argv.indexOf("--name") > -1 ? `${process.argv[process.argv.indexOf("--name") + 1]}.js` : "git-commit-info.js",
 	formatAttribute = (attribute) => {
 		if (Array.isArray(attribute)) {
 			return attribute.toString().trim()
@@ -35,7 +35,7 @@ require("child_process").exec("git log -1", (err, stdout) => {
 	const stdoutJSON = stdoutToJSON(stdout),
 		commitOutput = `module.exports = ${stdoutJSON}`
 
-	return fs.writeFile(`${dir}${fileName}`, commitOutput, (error) => {
-		return error ? console.log(error) : console.log(`Git commit info saved to ${dir}${fileName}: ${stdoutJSON}`)
+	return fs.writeFile(`${dir}${name}`, commitOutput, (error) => {
+		return error ? console.log(error) : console.log(`Git commit info saved to ${dir}${name}: ${stdoutJSON}`)
 	})
 })
