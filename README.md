@@ -5,24 +5,18 @@
 
 ## Installation
 
-Install this package by running
+#### NPM
 
 ``` SH
 npm install --save git-to-json
 ```
 
-or update your `package.json` dependencies like so:
+#### package.json
 
 ``` JSON
 "dependencies": {
   "git-to-json": "git+https://git@github.com/darrenklein/git-to-json.git"
 }
-```
-
-and run
-
-``` SH
-npm install
 ```
 
 ## Usage
@@ -43,7 +37,7 @@ git-to-json
 
 for example, in your project's `package.json` file:
 
-``` JS
+``` JSON
 "scripts": {
   "start": "git-to-json && node index.js"
 }

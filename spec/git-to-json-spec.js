@@ -1,6 +1,7 @@
-const gitToJSON = require("../lib/git-to-json.js"),
-	{ maybeCreateDirectory, stdoutToJSON, writeFile } = gitToJSON,
-	formatAttribute = require("../lib/format-attribute.js")
+const directory = require("../lib/directory.js"),
+	formatting = require("../lib/formatting.js"),
+	{ writeFile } = directory,
+	{ formatAttribute, stdoutToJSON } = formatting
 
 describe("Format a string with colon", () => {
 	it ("Should remove the colon, preceding label, and trailing and leading whitespace", () => {
@@ -17,6 +18,16 @@ describe("Format a string without colon", () => {
 		const testString = "commit 1234",
 			expectedOutput = "1234",
 			value = formatAttribute(testString)
+
+		expect(value).toBe(expectedOutput)
+	})
+})
+
+describe("Format an array", () => {
+	it ("Should convert an array of strings into a trimmed string", () => {
+		const testArray = ["First Jasmine test"],
+			expectedOutput = "First Jasmine test",
+			value = formatAttribute(testArray)
 
 		expect(value).toBe(expectedOutput)
 	})
