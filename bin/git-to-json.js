@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 const fs = require("fs"),
+	childProcess = require("child_process"),
 	dir = process.argv.indexOf("--dir") > -1 ? `./${process.argv[process.argv.indexOf("--dir") + 1]}/` : "./git-commit-info/",
 	name = process.argv.indexOf("--name") > -1 ? `${process.argv[process.argv.indexOf("--name") + 1]}.js` : "git-commit-info.js",
 	formatAttribute = (attribute) => {
@@ -20,22 +21,36 @@ const fs = require("fs"),
 			}
 
 		return JSON.stringify(stdoutJSON)
+	},
+	maybeCreateDirectory = (directory) => {
+		if (!fs.existsSync(directory)) {
+			return new Promise((resolve, reject) => {
+				fs.mkdir(directory, (err) => {
+					err ? reject(err) : resolve(directory)
+				})
+			})
+		}
+
+		return new Promise((resolve) => {
+			resolve(directory)
+		})
 	}
 
-if (!fs.existsSync(dir)) {
-	fs.mkdirSync(dir)
-	console.log(`Created ${dir}`)
-}
-
-require("child_process").exec("git log -1", (err, stdout) => {
+childProcess.exec("git log -1", (err, stdout) => {
 	if (err) {
-		return console.log(err)
+		return console.error(err)
 	}
 
-	const stdoutJSON = stdoutToJSON(stdout),
-		commitOutput = `module.exports = ${stdoutJSON}`
+	return maybeCreateDirectory(dir)
+		.then((directory) => {
+			const stdoutJSON = stdoutToJSON(stdout),
+				commitOutput = `module.exports = ${stdoutJSON}`
 
-	return fs.writeFile(`${dir}${name}`, commitOutput, (error) => {
-		return error ? console.log(error) : console.log(`Git commit info saved to ${dir}${name}: ${stdoutJSON}`)
-	})
+			return fs.writeFile(`${directory}${name}`, commitOutput, (error) => {
+				return error ? console.error(error) : console.log(`Git commit info saved to ${directory}${name}: ${stdoutJSON}`)
+			})
+		})
+		.catch((error) => {
+			console.error(error)
+		})
 })
