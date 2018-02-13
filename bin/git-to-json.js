@@ -15,7 +15,7 @@ childProcess.exec("git log -1", (err, stdout) => {
 		.then((directory) => {
 			const stdoutJSON = stdoutToJSON(stdout)
 
-			return writeFile(`${directory}${name}`, stdoutJSON)
+			return writeFile(directory, name, stdoutJSON)
 		})
 		.catch((error) => {
 			return console.error(error)
