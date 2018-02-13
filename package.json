@@ -5,6 +5,9 @@
   "bin": {
     "git-to-json": "./bin/git-to-json.js"
   },
+  "scripts": {
+    "test": "jasmine"
+  },
   "keywords": [
     "git",
     "node",
