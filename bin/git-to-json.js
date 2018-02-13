@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
 const childProcess = require("child_process"),
-	library = require("../lib.js"),
-	{ maybeCreateDirectory, stdoutToJSON, writeFile } = library,
+	gitToJSON = require("../lib/git-to-json.js"),
+	{ maybeCreateDirectory, stdoutToJSON, writeFile } = gitToJSON,
 	dir = process.argv.indexOf("--dir") > -1 ? `./${process.argv[process.argv.indexOf("--dir") + 1]}/` : "./git-commit-info/",
 	name = process.argv.indexOf("--name") > -1 ? `${process.argv[process.argv.indexOf("--name") + 1]}.js` : "git-commit-info.js"
 
