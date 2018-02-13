@@ -13,8 +13,11 @@
   ],
   "author": "Darren Klein",
   "license": "MIT",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/darrenklein/git-to-json.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darrenklein/git-to-json.git"
+  },
+  "devDependencies": {
+    "jasmine": "^3.0.0"
   }
 }
