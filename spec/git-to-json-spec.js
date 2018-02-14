@@ -63,9 +63,9 @@ describe("Format a string without colon", () => {
 	})
 })
 
-describe("Format an array", () => {
-	it ("Should convert an array of strings into a trimmed string", () => {
-		const testArray = ["First Jasmine test"],
+describe("Format a one-element array", () => {
+	it ("Should convert an array of a single string into a trimmed string", () => {
+		const testArray = ["    First Jasmine test"],
 			expectedOutput = "First Jasmine test",
 			value = formatAttribute(testArray)
 
@@ -73,14 +73,39 @@ describe("Format an array", () => {
 	})
 })
 
-describe("Format commit info as JSON", () => {
+describe("Format a multi-element array", () => {
+	it ("Should convert an array of a string into a trimmed string with newlines separating the former array elements", () => {
+		const testArray = ["    First Jasmine test", "    this will be a new line", "", "    should be two newlines before this sentence"],
+			expectedOutput = "First Jasmine test\nthis will be a new line\n\nshould be two newlines before this sentence",
+			value = formatAttribute(testArray)
+
+		expect(value).toBe(expectedOutput)
+	})
+})
+
+describe("Format commit info as JSON - single line message", () => {
 	it ("Should convert standard 'git log -1' output to string to a stringified JSON object.", () => {
-		const testString = "commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\nFirst Jasmine test\n",
+		const testString = "commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\n    First Jasmine test\n",
 			expectedOutput = JSON.stringify({
 				"commit": "1234",
 				"author": "Foo Bar <foo@bar.com>",
 				"date": "Mon Feb 12 21:34:44 2018 -0500",
 				"message": "First Jasmine test"
+			}),
+			value = stdoutToJSON(testString)
+
+		expect(value).toBe(expectedOutput)
+	})
+})
+
+describe("Format commit info as JSON - multi-line message", () => {
+	it ("Should convert standard 'git log -1' output to string to a stringified JSON object.", () => {
+		const testString = "commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\n    First Jasmine test\n    Here's another line!\n\n    Skipped an extra line before this one... woo!\n",
+			expectedOutput = JSON.stringify({
+				"commit": "1234",
+				"author": "Foo Bar <foo@bar.com>",
+				"date": "Mon Feb 12 21:34:44 2018 -0500",
+				"message": "First Jasmine test\nHere's another line!\n\nSkipped an extra line before this one... woo!"
 			}),
 			value = stdoutToJSON(testString)
 
