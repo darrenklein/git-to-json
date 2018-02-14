@@ -60,4 +60,9 @@ git-to-json --dir gitignore --name commit-info
 
 will result in `gitignore/commit-info.js`
 
+## Notes
+
+This module has been formatted according to ESLint's [eslint-config-airbnb-base] rules.
+
 [Git-to-JSON]: https://www.npmjs.com/package/git-to-json
+[eslint-config-airbnb-base]: https://www.npmjs.com/package/eslint-config-airbnb-base

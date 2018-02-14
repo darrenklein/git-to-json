@@ -6,7 +6,8 @@
     "git-to-json": "./bin/git-to-json.js"
   },
   "scripts": {
-    "test": "jasmine || exit 0"
+    "test": "jasmine || exit 0",
+    "lint": "eslint ./bin/*.js ./lib/*.js || exit 0"
   },
   "keywords": [
     "git",
@@ -21,6 +22,16 @@
     "url": "https://github.com/darrenklein/git-to-json.git"
   },
   "devDependencies": {
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "jasmine": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=4"
   }
 }
