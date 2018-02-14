@@ -1,6 +1,6 @@
 {
   "name": "git-to-json",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A simple Node module for retrieving and writing git commit info to JSON.",
   "bin": {
     "git-to-json": "./bin/git-to-json.js"
