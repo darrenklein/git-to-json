@@ -21,7 +21,7 @@ npm install --save git-to-json
 
 ## Usage
 
-The default behavior of Git-to-JSON is to read the info from your most recent git commit and write it to the file `git-commit-info/git-commit-info.js` as an exported module in JSON format. If a `git-commit-info/` directory does not yet exist, Git-to-JSON will create it.
+The default behavior of Git-to-JSON is to read the info from your most recent git commit and write it to the file `git-commit-info/git-commit-info.js` (in your project's root directory) as an exported module in JSON format. If a `git-commit-info/` directory does not yet exist, Git-to-JSON will create it - if it does, Git-to-JSON will overwrite the file.
 
 Example of a `git-commit-info/git-commit-info.js` file:
 
@@ -59,6 +59,8 @@ git-to-json --dir gitignore --name commit-info
 ```
 
 will result in `gitignore/commit-info.js`
+
+In version 1.X.X of Git-to-JSON, the directory that is created will always be placed in your project's root directory.
 
 ## Notes
 
