@@ -1,2 +1,3 @@
-/node_modules
-/git-commit-info
+node_modules/
+git-commit-info/
+git-commit-info.js

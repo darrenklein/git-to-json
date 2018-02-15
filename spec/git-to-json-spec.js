@@ -2,6 +2,16 @@ const formatting = require('../lib/formatting.js');
 
 const { formatAttribute, stdoutToJSON, formatDir } = formatting;
 
+describe('Format a directory name when no directory is provided - default module behavior', () => {
+  it('Should accept and return the "./" prefix', () => {
+    const testString = './';
+    const expectedOutput = './';
+    const value = formatDir(testString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
 describe('Format a directory name without "./" prefix and "/" suffix', () => {
   it('Should add the "./" prefix and "/" suffix to a directory name if missing', () => {
     const testString = 'gitignore';
