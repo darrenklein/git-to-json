@@ -3,7 +3,12 @@
 const formatting = require('../lib/formatting.js');
 const directory = require('../lib/directory.js');
 
-const { formatAttribute, stdoutToJSON, formatDir } = formatting;
+const {
+  formatAttribute,
+  stdoutToJSON,
+  formatDir,
+  formatFileName,
+} = formatting;
 const { directoryExists } = directory;
 
 describe('Format a directory name without "./" prefix and "/" suffix', () => {
@@ -31,6 +36,26 @@ describe('Format a directory name without "/" suffix', () => {
     const testString = './gitignore';
     const expectedOutput = './gitignore/';
     const value = formatDir(testString, dirString => dirString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Format a file name without .js file type', () => {
+  it('Should add the ".js" file type suffix to a file name if missing', () => {
+    const testString = 'test-file';
+    const expectedOutput = 'test-file.js';
+    const value = formatFileName(testString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Format a file name with .js file type', () => {
+  it('Should return the file name unchanged', () => {
+    const testString = 'test-file.js';
+    const expectedOutput = 'test-file.js';
+    const value = formatFileName(testString);
 
     expect(value).toBe(expectedOutput);
   });
@@ -168,7 +193,7 @@ describe('Check if an existing multi-level directory exists with detailed format
 });
 
 describe('Check if an non-existent single-level directory exists with simple formatting', () => {
-  it('Should check to see if a directory named "./false-test/" exists and return an object with "status: false", an existing path of "./", and a non-existent path of ["false-test"]', () => {
+  it('Should check to see if a directory named "false-test" exists and return an object with "status: false", an existing path of "./", and a non-existent path of ["false-test"]', () => {
     const dirName = 'false-test';
     const expectedOutput = JSON.stringify({
       status: false,
@@ -182,8 +207,36 @@ describe('Check if an non-existent single-level directory exists with simple for
 });
 
 describe('Check if a multi-level directory with a non-existent child exists with simple formatting', () => {
-  it('Should check to see if a directory named "./test/false-test/" exists and return an object with "status: false", an existing path of "./test/", and a non-existent path of ["false-test"]', () => {
+  it('Should check to see if a directory named "test/false-test" exists and return an object with "status: false", an existing path of "./test/", and a non-existent path of ["false-test"]', () => {
     const dirName = 'test/false-test';
+    const expectedOutput = JSON.stringify({
+      status: false,
+      existingPath: './test/',
+      nonExistentPathElements: ['false-test'],
+    });
+    const value = JSON.stringify(directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists));
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Check if an non-existent single-level directory exists with detailed formatting', () => {
+  it('Should check to see if a directory named "./false-test/" exists and return an object with "status: false", an existing path of "./", and a non-existent path of ["false-test"]', () => {
+    const dirName = './false-test/';
+    const expectedOutput = JSON.stringify({
+      status: false,
+      existingPath: './',
+      nonExistentPathElements: ['false-test'],
+    });
+    const value = JSON.stringify(directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists));
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Check if a multi-level directory with a non-existent child exists with detailed formatting', () => {
+  it('Should check to see if a directory named "./test/false-test/" exists and return an object with "status: false", an existing path of "./test/", and a non-existent path of ["false-test"]', () => {
+    const dirName = './test/false-test/';
     const expectedOutput = JSON.stringify({
       status: false,
       existingPath: './test/',
