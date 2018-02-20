@@ -1,6 +1,46 @@
 const formatting = require('../lib/formatting.js');
 
-const { formatAttribute, stdoutToJSON } = formatting;
+const { formatAttribute, stdoutToJSON, formatDir } = formatting;
+
+describe('Format a directory name without "./" prefix and "/" suffix', () => {
+  it('Should add the "./" prefix and "/" suffix to a directory name if missing', () => {
+    const testString = 'gitignore';
+    const expectedOutput = './gitignore/';
+    const value = formatDir(testString, dirString => dirString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Format a directory name without "./" prefix', () => {
+  it('Should add the "./" prefix to a directory name if missing', () => {
+    const testString = 'gitignore/';
+    const expectedOutput = './gitignore/';
+    const value = formatDir(testString, dirString => dirString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Format a directory name without "/" suffix', () => {
+  it('Should add the "/" suffix to a directory name if missing', () => {
+    const testString = './gitignore';
+    const expectedOutput = './gitignore/';
+    const value = formatDir(testString, dirString => dirString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Return a correctly formatted directory name without changing its structure', () => {
+  it('Should return the test string unchanged', () => {
+    const testString = './gitignore/';
+    const expectedOutput = testString;
+    const value = formatDir(testString, dirString => dirString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
 
 describe('Format a string with colon', () => {
   it('Should remove the colon, preceding label, and trailing and leading whitespace', () => {
