@@ -1,5 +1,6 @@
 # git-to-json
 > Read your project's latest git commit info and write it to JSON
+
 > Upgrading from v1.X.X to v2.X.X? See the [upgrade guide]
 
 [git-to-json] is a simple NPM module designed to retrieve the info for your project's most recent git commit and write it to a file in JSON format as an exportable module.
