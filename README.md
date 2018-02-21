@@ -25,7 +25,7 @@ module.exports = {"commit":"5aqfaa6741871zz5e67683a012a0062bdbd46a8z","author":"
 
 To run git-to-json, simply include the following command in the NPM script of your choice:
 
-```
+``` JSON
 git-to-json
 ```
 
@@ -41,14 +41,14 @@ for example, in your project's `package.json` file:
 
 As noted, the default behavior is to create a file named `git-commit-info.js` adjacent to your `package.json` file. You can also provide an optional directory and customize the file's name with the following options:
 
-``` SH
+``` JSON
 --dir      specify the name of the directory
 --name     specify the name of the file
 ```
 
 For example:
 
-```
+``` JSON
 git-to-json --dir gitignore --name commit-info
 ```
 
@@ -56,7 +56,7 @@ will result in `gitignore/commit-info.js`.
 
 As of v2.X.X, you can provide a file path of any depth:
 
-```
+``` JSON
 git-to-json --dir gitignore/git-info/latest
 ```
 
