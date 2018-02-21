@@ -15,10 +15,18 @@ In v2.X.X of git-to-json, the user has more control over the script's behavior. 
 
 #### Upgrading
 
-Version 2.X.X of git-to-json includes an additional dependency, [path], so the first step to upgrade your version is to run:
+Version 2.X.X of git-to-json includes an additional dependency, [path], so the first step to upgrade your version is to update your `package.json`:
+
+``` JSON
+"dependencies": {
+  "git-to-json": "^2.0.0"
+}
+```
+
+then run:
 
 ``` SH
-npm update git-to-json
+npm update --save git-to-json
 ```
 
 As noted above, the default behavior has changed slightly - instead of adding a directory and file named `git-commit-info/git-commit-info.js` adjacent to your `package.json` file, git-to-json will now just create the file - the directory is optional. If you were using the basic `git-to-json` command in your project, you would now need to specify the directory name with the `--dir` flag to replicate the behavior:
