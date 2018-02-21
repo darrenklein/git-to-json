@@ -70,5 +70,4 @@ This module has been formatted according to ESLint's [eslint-config-airbnb-base]
 
 [upgrade guide]: upgrade_guides/v1-to-v2-upgrade-guide.md
 [git-to-json]: https://www.npmjs.com/package/git-to-json
-[path]: https://www.npmjs.com/package/path
 [eslint-config-airbnb-base]: https://www.npmjs.com/package/eslint-config-airbnb-base

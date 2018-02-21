@@ -11,6 +11,8 @@ In v2.X.X of git-to-json, the user has more control over the script's behavior. 
 
 - v1.X.X only allowed a user to create a directory one level deep, such as `gitignore/git-commit-info.js` - v2.X.X allows a user to create a directory of any depth, such as `gitignore/git-info/git-commit-info.js`
 
+- The function `maybeRemoveDirectory()` has been removed in this version. This function was only used during a file write error to remove the directory created by running the script, if the directory was otherwise empty. The main feature of interest in v2.X.X is the ability to create nested directories, and I decided that this sort of destructive action was unnecessarily risky as it could end up removing empty directories that the user did not wish to delete.
+
 #### Upgrading
 
 Version 2.X.X of git-to-json includes an additional dependency, [path], so the first step to upgrade your version is to run:
@@ -26,3 +28,5 @@ git-to-json --dir git-commit-info
 ```
 
 If you were already specifying `--dir`, then you should not need to make any changes to your command.
+
+[path]: https://www.npmjs.com/package/path
