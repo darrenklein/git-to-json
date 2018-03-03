@@ -8,8 +8,9 @@ const name = process.argv.indexOf('--name') > -1 ? `${process.argv[process.argv.
 
 childProcess.exec('git log -1', (err, stdout) => {
   if (err) {
-    return console.error(err); // eslint-disable-line no-console
+    console.error(err); // eslint-disable-line no-console
+    return;
   }
 
-  return gitToJSON(dir, name, stdout);
+  gitToJSON(dir, name, stdout);
 });
