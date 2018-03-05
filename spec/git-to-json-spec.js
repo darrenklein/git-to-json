@@ -126,6 +126,21 @@ describe('Format commit info as JSON - single line message', () => {
   });
 });
 
+describe('Format commit info as JSON with capitalized keys - single line message', () => {
+  it('Should convert standard "git log -1" output to string to a stringified JSON object with capitalized keys when the message is a single line.', () => {
+    const testString = 'commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\n    Yet another Jasmine test\n';
+    const expectedOutput = JSON.stringify({
+      COMMIT: '1234',
+      AUTHOR: 'Foo Bar <foo@bar.com>',
+      DATE: 'Mon Feb 12 21:34:44 2018 -0500',
+      MESSAGE: 'Yet another Jasmine test',
+    });
+    const value = stdoutToJSON(testString, true);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
 describe('Format commit info as JSON - multi-line message', () => {
   it('Should convert standard "git log -1" output to string to a stringified JSON object when the message is multi-line.', () => {
     const testString = 'commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\n    First Jasmine test\n    Here\'s another line!\n\n    Skipped an extra line before this one... woo!\n';

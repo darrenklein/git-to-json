@@ -39,11 +39,12 @@ for example, in your project's `package.json` file:
 
 ### Options
 
-As noted, the default behavior is to create a file named `git-commit-info.js` adjacent to your `package.json` file. You can also provide an optional directory and customize the file's name with the following options:
+As noted, the default behavior is to create a file named `git-commit-info.js` adjacent to your `package.json` file. You can also provide an optional directory and customize the file's name and content with the following options:
 
 ``` JSON
---dir      specify the name of the directory
---name     specify the name of the file
+--dir           specify the name of the directory
+--name          specify the name of the file
+--upcasekeys    set the keys of the exported JSON as uppercase
 ```
 
 For example:
@@ -57,10 +58,10 @@ will result in `gitignore/commit-info.js`.
 As of v2.X.X, you can provide a file path of any depth:
 
 ``` JSON
-git-to-json --dir gitignore/git-info/latest
+git-to-json --dir gitignore/git-info/latest --upcasekeys
 ```
 
-will result in `gitignore/git-info/latest/git-commit-info.js`
+will result in `gitignore/git-info/latest/git-commit-info.js` with uppercased keys - "COMMIT", etc...
 
 If the directory provided does not exist, git-to-json will create it. If it does exist, git-to-json will output the file to the existing directory.
 
