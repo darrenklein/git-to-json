@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
-
+const fs = require('fs');
+const path = require('path');
 const formatting = require('../lib/formatting.js');
 const directory = require('../lib/directory.js');
 
+const { sep } = path;
 const {
   formatAttribute,
   stdoutToJSON,
@@ -171,48 +173,32 @@ describe('Format commit info as JSON - multi-line message with double quotes', (
   });
 });
 
-describe('Check if an existing single-level directory exists with simple formatting', () => {
-  it('Should check to see if a directory named "test" exists and return an object with "status: true"', () => {
-    const dirName = 'test';
-    const value = directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists);
-
-    expect(value.status).toBe(true);
+describe('Testing directoryExists(): check if an existing single-level directory exists with simple formatting', () => {
+  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists, return an object with "status: true", and clean up the created dir.', () => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
+      const value = directoryExists(formatDir(folder, dirString => dirString), dirExists => dirExists);
+      expect(value.status).toBe(true);
+      fs.rmdirSync(folder)
+    });
   });
 });
 
-describe('Check if an existing multi-level directory exists with simple formatting', () => {
-  it('Should check to see if a directory named "test/test-child" exists and return an object with "status: true"', () => {
-    const dirName = 'test/test-child';
-    const value = directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists);
-
-    expect(value.status).toBe(true);
+describe('Testing directoryExists(): check if an existing single-level directory exists with detailed formatting', () => {
+  it('Should check to see if a temp directory with the prefix "tmp_test-" and ending with a path separator exists, return an object with "status: true", and clean up the created dir', () => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
+      const value = directoryExists(formatDir(`${folder}${sep}`, dirString => dirString), dirExists => dirExists);
+      expect(value.status).toBe(true);
+      fs.rmdirSync(folder)
+    });
   });
 });
 
-describe('Check if an existing single-level directory exists with detailed formatting', () => {
-  it('Should check to see if a directory named "./test/" exists and return an object with "status: true"', () => {
-    const dirName = './test/';
-    const value = directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists);
-
-    expect(value.status).toBe(true);
-  });
-});
-
-describe('Check if an existing multi-level directory exists with detailed formatting', () => {
-  it('Should check to see if a directory named "./test/test-child/" exists and return an object with "status: true"', () => {
-    const dirName = './test/test-child/';
-    const value = directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists);
-
-    expect(value.status).toBe(true);
-  });
-});
-
-describe('Check if an non-existent single-level directory exists with simple formatting', () => {
-  it('Should check to see if a directory named "false-test" exists and return an object with "status: false", an existing path of "./", and a non-existent path of ["false-test"]', () => {
+describe('Testing directoryExists(): check if an non-existent single-level directory exists with simple formatting', () => {
+  it('Should check to see if a non-existent directory named "false-test" exists and return an object verifying the directory\'s non-existence', () => {
     const dirName = 'false-test';
     const expectedOutput = JSON.stringify({
       status: false,
-      existingPath: './',
+      existingPath: `.${sep}`,
       nonExistentPathElements: ['false-test'],
     });
     const value = JSON.stringify(directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists));
@@ -221,22 +207,24 @@ describe('Check if an non-existent single-level directory exists with simple for
   });
 });
 
-describe('Check if a multi-level directory with a non-existent child exists with simple formatting', () => {
-  it('Should check to see if a directory named "test/false-test" exists and return an object with "status: false", an existing path of "./test/", and a non-existent path of ["false-test"]', () => {
-    const dirName = 'test/false-test';
-    const expectedOutput = JSON.stringify({
-      status: false,
-      existingPath: './test/',
-      nonExistentPathElements: ['false-test'],
-    });
-    const value = JSON.stringify(directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists));
+describe('Testing directoryExists(): check if a multi-level directory with a non-existent child exists with simple formatting', () => {
+  it('Should check to see if a non-existent directory named "tmp_test-/false-test" exists and return an object verifying the directory\'s non-existence - it will create the parent directory and clean it up afterward', () => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
+      const expectedOutput = JSON.stringify({
+        status: false,
+        existingPath: `.${sep}${folder}${sep}`,
+        nonExistentPathElements: ['false-test'],
+      });
+      const value = directoryExists(formatDir(`${folder}${sep}false-test`, dirString => JSON.stringify(dirString)), dirExists => JSON.stringify(dirExists));
 
-    expect(value).toBe(expectedOutput);
+      expect(value).toBe(expectedOutput);
+      fs.rmdirSync(folder)
+    });
   });
 });
 
-describe('Check if an non-existent single-level directory exists with detailed formatting', () => {
-  it('Should check to see if a directory named "./false-test/" exists and return an object with "status: false", an existing path of "./", and a non-existent path of ["false-test"]', () => {
+describe('Testing directoryExists(): check if an non-existent single-level directory exists with detailed formatting', () => {
+  it('Should check to see if a directory named "./false-test/" exists and return an object confirming the directory\'s non-existence', () => {
     const dirName = './false-test/';
     const expectedOutput = JSON.stringify({
       status: false,
@@ -249,16 +237,18 @@ describe('Check if an non-existent single-level directory exists with detailed f
   });
 });
 
-describe('Check if a multi-level directory with a non-existent child exists with detailed formatting', () => {
-  it('Should check to see if a directory named "./test/false-test/" exists and return an object with "status: false", an existing path of "./test/", and a non-existent path of ["false-test"]', () => {
-    const dirName = './test/false-test/';
-    const expectedOutput = JSON.stringify({
-      status: false,
-      existingPath: './test/',
-      nonExistentPathElements: ['false-test'],
-    });
-    const value = JSON.stringify(directoryExists(formatDir(dirName, dirString => dirString), dirExists => dirExists));
+describe('Testing directoryExists(): check if a multi-level directory with a non-existent child exists with detailed formatting', () => {
+  it('Should check to see if a non-existent directory named "tmp_test-/false-test/" exists and return an object verifying the directory\'s non-existence - it will create the parent directory and clean it up afterward', () => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
+      const expectedOutput = JSON.stringify({
+        status: false,
+        existingPath: `.${sep}${folder}${sep}`,
+        nonExistentPathElements: ['false-test'],
+      });
+      const value = directoryExists(formatDir(`${folder}${sep}false-test${sep}`, dirString => JSON.stringify(dirString)), dirExists => JSON.stringify(dirExists));
 
-    expect(value).toBe(expectedOutput);
+      expect(value).toBe(expectedOutput);
+      fs.rmdirSync(folder)
+    });
   });
 });
