@@ -42,9 +42,9 @@ for example, in your project's `package.json` file:
 As noted, the default behavior is to create a file named `git-commit-info.js` adjacent to your `package.json` file. You can also provide an optional directory and customize the file's name and content with the following options:
 
 ``` JSON
---dir           specify the name of the directory
---name          specify the name of the file
---upcasekeys    set the keys of the exported JSON as uppercase
+--dir <path/to/dir>     specify the relative file path
+--name <filename.js>    specify the name of the file
+--upcasekeys            set the keys of the exported JSON as uppercase
 ```
 
 For example:
