@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const fs = require('fs');
+const fs = require('fs-extra'); // Use fs-extra to allow the removal of nested directories
 const path = require('path');
 const formatting = require('../lib/formatting.js');
 const directory = require('../lib/directory.js');
@@ -184,7 +184,7 @@ describe('Testing stdoutToJSON(): format commit info as JSON - multi-line messag
 });
 
 describe('Testing directoryExists(): check if an existing single-level directory exists with simple formatting', () => {
-  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists, return an object with "status: true", and clean up the created dir.', () => {
+  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists and return an object with "status: true"', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
       const value = directoryExists(formatDir(folder, dirString => dirString), dirExists => dirExists);
 
@@ -195,7 +195,7 @@ describe('Testing directoryExists(): check if an existing single-level directory
 });
 
 describe('Testing directoryExists(): check if an existing single-level directory exists with detailed formatting', () => {
-  it('Should check to see if a temp directory with the prefix "tmp_test-" and ending with a path separator exists, return an object with "status: true", and clean up the created dir', () => {
+  it('Should check to see if a temp directory with the prefix "tmp_test-" and ending with a path separator exists and return an object with "status: true"', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
       const value = directoryExists(formatDir(`${folder}${sep}`, dirString => dirString), dirExists => dirExists);
 
@@ -220,7 +220,7 @@ describe('Testing directoryExists(): check if an non-existent single-level direc
 });
 
 describe('Testing directoryExists(): check if a multi-level directory with a non-existent child exists with simple formatting', () => {
-  it('Should check to see if a non-existent directory named "tmp_test-/false-test" exists and return an object verifying the directory\'s non-existence - it will create the parent directory and clean it up afterward', () => {
+  it('Should check to see if a non-existent directory named "tmp_test-/false-test" exists and return an object verifying the directory\'s non-existence', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
       const expectedOutput = JSON.stringify({
         status: false,
@@ -250,7 +250,7 @@ describe('Testing directoryExists(): check if an non-existent single-level direc
 });
 
 describe('Testing directoryExists(): check if a multi-level directory with a non-existent child exists with detailed formatting', () => {
-  it('Should check to see if a non-existent directory named "tmp_test-/false-test/" exists and return an object verifying the directory\'s non-existence - it will create the parent directory and clean it up afterward', () => {
+  it('Should check to see if a non-existent directory named "tmp_test-/false-test/" exists and return an object verifying the directory\'s non-existence', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
       const expectedOutput = JSON.stringify({
         status: false,
@@ -261,6 +261,32 @@ describe('Testing directoryExists(): check if a multi-level directory with a non
 
       expect(value).toBe(expectedOutput);
       fs.rmdirSync(folder);
+    });
+  });
+});
+
+describe('Testing directoryExists(): check if an existing multi-level directory exists with simple formatting', () => {
+  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists and return an object with "status: true"', () => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, parentFolder) => {
+      fs.mkdtemp(path.join(`.${sep}${parentFolder}`, 'tmp_test-'), (err, childFolder) => {
+        const value = directoryExists(formatDir(childFolder, dirString => dirString), dirExists => dirExists);
+
+        expect(value.status).toBe(true);
+        fs.removeSync(parentFolder);
+      })
+    });
+  });
+});
+
+describe('Testing directoryExists(): check if an existing multi-level directory exists with detailed formatting', () => {
+  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists and return an object with "status: true"', () => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, parentFolder) => {
+      fs.mkdtemp(path.join(`.${sep}${parentFolder}`, 'tmp_test-'), (err, childFolder) => {
+        const value = directoryExists(formatDir(`${childFolder}${sep}`, dirString => dirString), dirExists => dirExists);
+
+        expect(value.status).toBe(true);
+        fs.removeSync(parentFolder);
+      })
     });
   });
 });
