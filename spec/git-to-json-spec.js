@@ -177,8 +177,9 @@ describe('Testing directoryExists(): check if an existing single-level directory
   it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists, return an object with "status: true", and clean up the created dir.', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
       const value = directoryExists(formatDir(folder, dirString => dirString), dirExists => dirExists);
+
       expect(value.status).toBe(true);
-      fs.rmdirSync(folder)
+      fs.rmdirSync(folder);
     });
   });
 });
@@ -187,8 +188,9 @@ describe('Testing directoryExists(): check if an existing single-level directory
   it('Should check to see if a temp directory with the prefix "tmp_test-" and ending with a path separator exists, return an object with "status: true", and clean up the created dir', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
       const value = directoryExists(formatDir(`${folder}${sep}`, dirString => dirString), dirExists => dirExists);
+
       expect(value.status).toBe(true);
-      fs.rmdirSync(folder)
+      fs.rmdirSync(folder);
     });
   });
 });
@@ -218,7 +220,7 @@ describe('Testing directoryExists(): check if a multi-level directory with a non
       const value = directoryExists(formatDir(`${folder}${sep}false-test`, dirString => JSON.stringify(dirString)), dirExists => JSON.stringify(dirExists));
 
       expect(value).toBe(expectedOutput);
-      fs.rmdirSync(folder)
+      fs.rmdirSync(folder);
     });
   });
 });
@@ -248,7 +250,7 @@ describe('Testing directoryExists(): check if a multi-level directory with a non
       const value = directoryExists(formatDir(`${folder}${sep}false-test${sep}`, dirString => JSON.stringify(dirString)), dirExists => JSON.stringify(dirExists));
 
       expect(value).toBe(expectedOutput);
-      fs.rmdirSync(folder)
+      fs.rmdirSync(folder);
     });
   });
 });
