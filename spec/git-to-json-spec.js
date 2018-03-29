@@ -13,10 +13,20 @@ const {
 } = formatting;
 const { directoryExists } = directory;
 
-describe('Testing formatFileName(): format a file name without .js file type', () => {
+describe('Testing formatFileName(): format a file name without ".js" file type', () => {
   it('Should add the ".js" file type suffix to a file name if missing', () => {
     const testString = 'test-file';
     const expectedOutput = 'test-file.js';
+    const value = formatFileName(testString);
+
+    expect(value).toBe(expectedOutput);
+  });
+});
+
+describe('Testing formatFileName(): format a file name with a file type other than ".js"', () => {
+  it('Should add the ".js" file type suffix to a file name if any other file type was provided', () => {
+    const testString = 'test-file.json';
+    const expectedOutput = 'test-file.json.js';
     const value = formatFileName(testString);
 
     expect(value).toBe(expectedOutput);
