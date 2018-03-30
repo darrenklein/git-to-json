@@ -266,27 +266,27 @@ describe('Testing directoryExists(): check if a multi-level directory with a non
 });
 
 describe('Testing directoryExists(): check if an existing multi-level directory exists with simple formatting', () => {
-  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists and return an object with "status: true"', () => {
+  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists, and return an object with "status: true"', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, parentFolder) => {
-      fs.mkdtemp(path.join(`.${sep}${parentFolder}`, 'tmp_test-'), (err, childFolder) => {
+      fs.mkdtemp(path.join(`.${sep}${parentFolder}`, 'tmp_test-'), (error, childFolder) => {
         const value = directoryExists(formatDir(childFolder, dirString => dirString), dirExists => dirExists);
 
         expect(value.status).toBe(true);
         fs.removeSync(parentFolder);
-      })
+      });
     });
   });
 });
 
 describe('Testing directoryExists(): check if an existing multi-level directory exists with detailed formatting', () => {
-  it('Should create a temp directory with the prefix "tmp_test-", confirm that it exists and return an object with "status: true"', () => {
+  it('Should create a nested set of temp directories with the prefixes "tmp_test-", confirm that the child exists, and return an object with "status: true"', () => {
     fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, parentFolder) => {
-      fs.mkdtemp(path.join(`.${sep}${parentFolder}`, 'tmp_test-'), (err, childFolder) => {
+      fs.mkdtemp(path.join(`.${sep}${parentFolder}`, 'tmp_test-'), (error, childFolder) => {
         const value = directoryExists(formatDir(`${childFolder}${sep}`, dirString => dirString), dirExists => dirExists);
 
         expect(value.status).toBe(true);
         fs.removeSync(parentFolder);
-      })
+      });
     });
   });
 });
