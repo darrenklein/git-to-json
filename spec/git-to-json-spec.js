@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 const fs = require('fs-extra'); // Use fs-extra to allow the removal of nested directories
 const path = require('path');
+const gitToJSON = require('../lib/git-to-json.js');
 const formatting = require('../lib/formatting.js');
 const directory = require('../lib/directory.js');
+const writeFile = require('../lib/file.js');
 
 const { sep } = path;
 const {
@@ -11,7 +13,7 @@ const {
   formatDir,
   formatFileName,
 } = formatting;
-const { directoryExists } = directory;
+const { directoryExists, maybeMakeDirectory } = directory;
 
 describe('Testing formatFileName(): format a file name without ".js" file type', () => {
   it('Should add the ".js" file type suffix to a file name if missing', () => {
@@ -287,6 +289,61 @@ describe('Testing directoryExists(): check if an existing multi-level directory 
         expect(value.status).toBe(true);
         fs.removeSync(parentFolder);
       });
+    });
+  });
+});
+
+describe('Testing writeFile(): create a new file in the specified directory', () => {
+  it('Should take directory, name, upperCaseKeys, and stdout arguments, create a populated file based on those values, and return an promise with values describing the file path and the contents of the file', (done) => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => {
+      const stdout = 'commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\n    First Jasmine test\n';
+      const expectedValue = {
+        filePath: `${folder}${sep}test.js`,
+        stdoutJSON: '{"commit":"1234","author":"Foo Bar <foo@bar.com>","date":"Mon Feb 12 21:34:44 2018 -0500","message":"First Jasmine test"}',
+      };
+      const value = {};
+
+      return writeFile(`${folder}${sep}`, 'test', false, stdout).then(({ filePath, stdoutJSON }) => {
+        value.filePath = filePath;
+        value.stdoutJSON = stdoutJSON;
+
+        expect(JSON.stringify(value)).toBe(JSON.stringify(expectedValue));
+        fs.removeSync(folder);
+        done();
+      });
+    });
+  });
+});
+
+describe('Testing maybeMakeDirectory(): attempt to create a directory that already exists', () => {
+  it('Should check to see if an existing directory exists and return that directory\'s formatted name', (done) => {
+    fs.mkdtemp(path.join(`.${sep}`, 'tmp_test-'), (err, folder) => { // eslint-disable-line arrow-body-style
+      return maybeMakeDirectory(folder).then((value) => {
+        expect(value).toBe(`./${folder}/`);
+        fs.rmdirSync(folder);
+        done();
+      });
+    });
+  });
+});
+
+describe('Testing maybeMakeDirectory(): attempt to create a directory that does not exist', () => {
+  it('Should check to see if a non-existent directory exists, create a new directory, and return that directory\'s formatted name', (done) => { // eslint-disable-line arrow-body-style
+    return maybeMakeDirectory('test').then((value) => {
+      expect(value).toBe('./test/');
+      fs.rmdirSync(value);
+      done();
+    });
+  });
+});
+
+describe('Testing gitToJSON(): test the app\'s default behavior when no options are passed', () => {
+  it('Should create a file named "git-commit-info.js" in the app\'s root directory and return true', (done) => {
+    const testString = 'commit 1234\nAuthor: Foo Bar <foo@bar.com>\nDate:   Mon Feb 12 21:34:44 2018 -0500\n\n    First Jasmine test\n';
+    return gitToJSON(`.${sep}`, 'git-commit-info.js', false, testString).then((value) => {
+      expect(value).toBe(true);
+      fs.unlinkSync(`.${sep}git-commit-info.js`);
+      done();
     });
   });
 });

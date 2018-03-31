@@ -37,6 +37,8 @@ for example, in your project's `package.json` file:
 }
 ```
 
+It probably goes without saying, but this app requires that it is run in a directory that has been established as a git repository.
+
 ### Options
 
 As noted, the default behavior is to create a file named `git-commit-info.js` adjacent to your `package.json` file. You can also provide an optional directory and customize the file's name and content with the following options:
